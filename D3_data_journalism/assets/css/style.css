@@ -30,6 +30,7 @@ body {
   font-size: 16px;
 }
 
+/* ADDED */
 .tooltip {
   position: absolute;
   width: 80px;
@@ -43,3 +44,4 @@ body {
   border-radius: 10px;
   display: none;
 }
+
