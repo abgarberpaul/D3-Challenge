@@ -1,4 +1,3 @@
-// @TODO: YOUR CODE HERE!
 var svgArea = d3.select("body").select("svg");
 
 // SVG wrapper dimensions are determined by the current width and
@@ -28,29 +27,29 @@ var chartGroup = svg.append("g")
   .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
 // Read CSV
-d3.csv("assets/data/data.csv").then(function(censusData) {
-    console.log(censusData);
- 
+d3.csv("assets/data/norway_medals.csv").then(function(medalData) {
+
+  // create date parser
+  var dateParser = d3.timeParse("%d-%b");
+
   // parse data
-  censusData.forEach(function(data) {
-    data.obesity =  +data.obesity;
-    data.income = +data.income;
+  medalData.forEach(function(data) {
+    data.date = dateParser(data.date);
+    data.medals = +data.medals;
   });
 
-
   // create scales
-
-  var yLinearScale = d3.scaleLinear()
-    .domain([0, d3.max(censusData, d => d.income)])
-    .range([height, 0]);
-
-    var xLinearScale = d3.scaleLinear()
-    .domain([15, d3.max(censusData, d => d.obesity)])
+  var xTimeScale = d3.scaleTime()
+    .domain(d3.extent(medalData, d => d.date))
     .range([0, width]);
 
+  var yLinearScale = d3.scaleLinear()
+    .domain([0, d3.max(medalData, d => d.medals)])
+    .range([height, 0]);
+
   // create axes
-  var xAxis = d3.axisBottom(xLinearScale);
-  var yAxis = d3.axisLeft(yLinearScale);
+  var xAxis = d3.axisBottom(xTimeScale);
+  var yAxis = d3.axisLeft(yLinearScale).ticks(6);
 
   // append axes
   chartGroup.append("g")
@@ -60,30 +59,43 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
   chartGroup.append("g")
     .call(yAxis);
 
+  // line generator
+  var line = d3.line()
+    .x(d => xTimeScale(d.date))
+    .y(d => yLinearScale(d.medals));
+
+  // append line
+  chartGroup.append("path")
+    .data([medalData])
+    .attr("d", line)
+    .attr("fill", "none")
+    .attr("stroke", "red");
+
   // append circles
   var circlesGroup = chartGroup.selectAll("circle")
-    .data(censusData)
+    .data(medalData)
     .enter()
     .append("circle")
-    .attr("cx", d => xLinearScale(d.obesity))
-    .attr("cy", d => yLinearScale(d.income))
-    .attr("r", "20")
+    .attr("cx", d => xTimeScale(d.date))
+    .attr("cy", d => yLinearScale(d.medals))
+    .attr("r", "10")
     .attr("fill", "gold")
     .attr("stroke-width", "1")
     .attr("stroke", "black");
 
+  // date formatter to display dates nicely
+  var dateFormatter = d3.timeFormat("%d-%b");
+
   // Step 1: Append tooltip div
-  var toolTip = d3.select("chartBody")
+  var toolTip = d3.select("body")
     .append("div")
     .classed("tooltip", true);
 
   // Step 2: Create "mouseover" event listener to display tooltip
   circlesGroup.on("mouseover", function(d) {
-      console.log(d.state)
     toolTip.style("display", "block")
         .html(
-          `<strong>(d.state)<strong><hr>Obesity rate: (d.obesity)<hr> Average Annual Income: (d.income)`
-        )
+          `<strong>${dateFormatter(d.date)}<strong><hr>${d.medals} medal(s) won`)
         .style("left", d3.event.pageX + "px")
         .style("top", d3.event.pageY + "px");
   })
@@ -97,3 +109,6 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
   console.log(error);
 });
 
+circlesGroup.on("mouseover", onMouseover)
+  .on("mouseout", onMouseout)
+  .on("click", onClick);

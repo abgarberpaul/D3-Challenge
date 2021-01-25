@@ -91,7 +91,6 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
   .on("mouseout", function() {
     toolTip.style("display", "none");
   });
-
 }
 , function(error) {
   console.log(error);
