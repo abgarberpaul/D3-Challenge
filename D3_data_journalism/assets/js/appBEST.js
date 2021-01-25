@@ -1,5 +1,4 @@
 // @TODO: YOUR CODE HERE!
-
 var svgArea = d3.select("body").select("svg");
 
 // SVG wrapper dimensions are determined by the current width and
@@ -45,7 +44,7 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
     .domain([0, d3.max(censusData, d => d.income)])
     .range([height, 0]);
 
-    var xLinearScale = d3.scaleLinear()
+  var xLinearScale = d3.scaleLinear()
     .domain([15, d3.max(censusData, d => d.obesity)])
     .range([0, width]);
 
@@ -61,6 +60,23 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
   chartGroup.append("g")
     .call(yAxis);
 
+  // Add X axis label:
+  svg.append("text")
+      .attr("text-anchor", "end")
+      .attr("x", width)
+      .attr("y", height+50 )
+      .text("Average Obesity");
+  
+      // Add Y axis label:
+  svg.append("text")
+      .attr("text-anchor", "end")
+      .attr("x", 0)
+      .attr("y", height/2)
+      .text("Average Income")
+      .attr("text-anchor", "start")
+
+
+
   // append circles
   var circlesGroup = chartGroup.selectAll("circle")
     .data(censusData)
@@ -72,16 +88,17 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
     .attr("fill", "gold")
     .attr("stroke-width", "1")
     .attr("stroke", "black");
+  
 
   // Step 1: Append tooltip div
   var toolTip = d3.select("chartBody")
-    .append("div")
+    .append("svg")
     .classed("tooltip", true);
 
   // Step 2: Create "mouseover" event listener to display tooltip
   circlesGroup.on("mouseover", function(d) {
-      console.log(d.state)
-    toolTip.style("display", "block")
+      console.log(d.abbr)
+      toolTip.style("display", "block")
         .html(
           `<strong>(d.state)<strong><hr>Obesity rate: (d.obesity)<hr> Average Annual Income: (d.income)`
         )
@@ -89,9 +106,10 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
         .style("top", d3.event.pageY + "px");
   })
   // Step 3: Create "mouseout" event listener to hide tooltip
-  .on("mouseout", function() {
+  .on("mouseout", function(d) {
     toolTip.style("display", "none");
   });
+
 }
 , function(error) {
   console.log(error);
