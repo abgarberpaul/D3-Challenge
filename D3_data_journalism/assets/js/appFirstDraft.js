@@ -73,17 +73,15 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
     .attr("stroke", "black");
 
   // Step 1: Append tooltip div
-  var toolTip = d3.select("chartBody")
+  var toolTip = d3.select(".new_type")
     .append("div")
     .classed("tooltip", true);
 
   // Step 2: Create "mouseover" event listener to display tooltip
   circlesGroup.on("mouseover", function(d) {
-      console.log(d.state)
+      console.log(d)
     toolTip.style("display", "block")
-        .html(
-          `<strong>(d.state)<strong><hr>Obesity rate: (d.obesity)<hr> Average Annual Income: (d.income)`
-        )
+        .html(d.state)
         .style("left", d3.event.pageX + "px")
         .style("top", d3.event.pageY + "px");
   })
@@ -96,4 +94,3 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
 , function(error) {
   console.log(error);
 });
-
