@@ -6,6 +6,7 @@ var svgArea = d3.select("body").select("svg");
 // height of the browser window.
 var svgWidth = window.innerWidth;
 var svgHeight = window.innerHeight;
+
 var margin = {
   top: 50,
   bottom: 50,
@@ -25,29 +26,32 @@ var svg = d3
 
 // Append group element
 var chartGroup = svg.append("g")
-  .attr("transform", `translate(${margin.left}, ${margin.top})`);
+  .attr("transform", 'translate(${margin.left}, ${margin.top})');
 
 // Read CSV
 d3.csv("assets/data/data.csv").then(function(censusData) {
-  console.log(censusData);
-
-  // create date parser
+    console.log(censusData);
+  //NEW >> create date parser
   var dateParser = d3.timeParse("%d-%b");
-
+  
   // parse data
+  // NEW >> added a second ; on line 41
   censusData.forEach(function(data) {
     data.obesity =  +data.obesity;
     data.income = +data.income;;
   });
 
+
   // create scales
+
   var xLinearScale = d3.scaleLinear()
     .domain(d3.extent(censusData, d => d.obesity))
     .range([0, width]);
+
   var yLinearScale = d3.scaleLinear()
     .domain([0, d3.max(censusData, d => d.income)])
     .range([height, 0]);
-
+  
   // create axes
   var xAxis = d3.axisBottom(xLinearScale);
   var yAxis = d3.axisLeft(yLinearScale).ticks(6);
@@ -56,6 +60,7 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
   chartGroup.append("g")
     .attr("transform", `translate(0, ${height})`)
     .call(xAxis);
+
   chartGroup.append("g")
     .call(yAxis);
 
@@ -68,64 +73,37 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
     .attr("cy", d => yLinearScale(d.income))
     .attr("r", "10")
     .attr("fill", "gold")
-      .attr("fill-opacity","1")
-    .attr("stroke", "black")
-      .attr("stroke-width", "1");
-
-    // Append Abbreviation to each data point
-    chartGroup.append("text")
-    .selectAll("circles")
-    .data(censusData)
-    .enter()
-    .append("tspan")
-        .attr("x", d => xLinearScale(d.obesity))
-        .attr("y", d => yLinearScale(d.income))
-        .attr("text-anchor", "middle")
-        .text(function(data) {
-            return data.abbr
-        })
-        .attr("fill", "blue")
-        .attr("font-size", 10, "bold");
-
-  // ADD ABBREVIATIONS << DRAFT 2
-  // var circlesText = chartGroup.selectAll("circle")
-  //   .data(censusData)
-  //   .enter()
-  //   .append("text")
-  //   .attr("class", "stateText")
-  //   .attr("font-color", "black")  
-  //   .attr("dx", d => xLinearScale(d.obesity))
-  //   .attr("dy", d => yLinearScale(d.income))
-  //   .text(function(d){
-  //     return d.abbr
-  //   });
-
-  
-  // ADD ABBREVIATIONS << DRAFT 1
-  // chartGroup.append("circle")
-  //   .attr("dx", function(d){return -20})
-  //   .text(function(d){return d.abbr});
-
+    .attr("stroke-width", "1")
+    .attr("stroke", "black");
 
   // Step 1: Append tooltip div
   var toolTip = d3.select("body")
     .append("div")
     .classed("tooltip", true);
 
+
   // Step 2: Create "mouseover" event listener to display tooltip
   circlesGroup.on("mouseover", function(d) {
+      console.log(d.state)
     toolTip.style("display", "block")
         .html(
-          `<strong>${d.state}<strong><hr>Obesity rate: ${d.obesity}<hr> Avg Annual Income: $${d.income}.00`)
+          `<strong>${d.state}<strong>`)
         .style("left", d3.event.pageX + "px")
-        .style("top", d3.event.pageY + "px");
+        .style("top", d3.event.pageY +"px");
+          // `<strong>${d.state}<strong><hr>Obesity rate: (d.obesity)<hr> Average Annual Income: (d.income)`
   })
 
   // Step 3: Create "mouseout" event listener to hide tooltip
   .on("mouseout", function() {
     toolTip.style("display", "none");
   });
+
+  // circlesGroup.append("text").text(d => d.abbr)
+
 }
+
+
 , function(error) {
   console.log(error);
 });
+
