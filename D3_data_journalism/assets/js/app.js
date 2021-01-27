@@ -42,10 +42,10 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
 
   // create scales
   var xLinearScale = d3.scaleLinear()
-    .domain(d3.extent(censusData, d => d.obesity))
+    .domain(d3.extent(censusData, d => (d.obesity-1)))
     .range([0, width]);
   var yLinearScale = d3.scaleLinear()
-    .domain([0, d3.max(censusData, d => d.income)])
+    .domain([0, d3.max(censusData, d => (d.income+8000))])
     .range([height, 0]);
 
   // create axes
@@ -58,6 +58,41 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
     .call(xAxis);
   chartGroup.append("g")
     .call(yAxis);
+
+
+
+  // Add X axis label:
+  svg.append("text")
+      .attr("text-anchor", "end")
+      .attr("x", 28)
+      .attr("y",  10)
+      .text("Average Obesity");
+  
+      // Add Y axis label:
+  svg.append("text")
+      .attr("text-anchor", "end")
+      .attr("x", 0)
+      .attr("y", height/2)
+      .text("Average Income")
+      .attr("text-anchor", "start")
+
+
+  // // Create axes labels
+  // chartGroup.append("text")
+  //   .attr("transform", "rotate(-90)")
+  //   .attr("y", 0 - margin.left + 40)
+  //   .attr("x", 0 - (height / 2))
+  //   .attr("dy", "1em")
+  //   .attr("class", "axisText")
+  //   .text("Annual Income per Household");
+
+  // chartGroup.append("text")
+  //   .attr("transform", `translate(${width / 2}, ${height + margin.top + 30})`)
+  //   .attr("class", "axisText")
+  //   .text("Obesity (%)");
+
+
+
 
   // append circles
   var circlesGroup = chartGroup.selectAll("circle")
@@ -87,25 +122,6 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
         .attr("fill", "blue")
         .attr("font-size", 10, "bold");
 
-  // ADD ABBREVIATIONS << DRAFT 2
-  // var circlesText = chartGroup.selectAll("circle")
-  //   .data(censusData)
-  //   .enter()
-  //   .append("text")
-  //   .attr("class", "stateText")
-  //   .attr("font-color", "black")  
-  //   .attr("dx", d => xLinearScale(d.obesity))
-  //   .attr("dy", d => yLinearScale(d.income))
-  //   .text(function(d){
-  //     return d.abbr
-  //   });
-
-  
-  // ADD ABBREVIATIONS << DRAFT 1
-  // chartGroup.append("circle")
-  //   .attr("dx", function(d){return -20})
-  //   .text(function(d){return d.abbr});
-
 
   // Step 1: Append tooltip div
   var toolTip = d3.select("body")
@@ -116,7 +132,7 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
   circlesGroup.on("mouseover", function(d) {
     toolTip.style("display", "block")
         .html(
-          `<strong>${d.state}<strong><hr>Obesity rate: ${d.obesity}<hr> Avg Annual Income: $${d.income}.00`)
+          `<strong>${d.state}<strong><hr>Obesity rate: ${d.obesity}%<hr> Avg Annual Income: $${d.income}.00`)
         .style("left", d3.event.pageX + "px")
         .style("top", d3.event.pageY + "px");
   })
