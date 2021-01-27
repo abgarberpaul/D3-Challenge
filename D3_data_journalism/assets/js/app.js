@@ -10,7 +10,7 @@ var margin = {
   top: 50,
   bottom: 50,
   right: 50,
-  left: 50
+  left: 100
 };
 
 var height = svgHeight - margin.top - margin.bottom;
@@ -42,8 +42,8 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
 
   // create scales
   var xLinearScale = d3.scaleLinear()
-    .domain(d3.extent(censusData, d => (d.obesity-1)))
-    .range([0, width]);
+    .domain(d3.extent(censusData, d => (d.obesity-.5)))
+    .range([0, (width)]);
   var yLinearScale = d3.scaleLinear()
     .domain([0, d3.max(censusData, d => (d.income+8000))])
     .range([height, 0]);
@@ -59,38 +59,30 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
   chartGroup.append("g")
     .call(yAxis);
 
-
-
-  // Add X axis label:
-  svg.append("text")
+  // Add Y axis label:
+  chartGroup.append("text")
       .attr("text-anchor", "end")
-      .attr("x", 28)
-      .attr("y",  10)
-      .text("Average Obesity");
+      .attr("transform", "rotate(-90)")
+      .attr("x", 0 - (margin.left))
+      .attr("y", -50)
+      .text("Average Income ($)");
   
-      // Add Y axis label:
-  svg.append("text")
+  // Add X axis label:
+  chartGroup.append("text")
       .attr("text-anchor", "end")
-      .attr("x", 0)
-      .attr("y", height/2)
-      .text("Average Income")
-      .attr("text-anchor", "start")
+      .attr("x", (width/2))
+      .attr("y", (height +30))
+      .text("Obesity Rate (%)")
+      .attr("text-anchor", "start");
 
-
-  // // Create axes labels
-  // chartGroup.append("text")
-  //   .attr("transform", "rotate(-90)")
-  //   .attr("y", 0 - margin.left + 40)
-  //   .attr("x", 0 - (height / 2))
-  //   .attr("dy", "1em")
-  //   .attr("class", "axisText")
-  //   .text("Annual Income per Household");
-
-  // chartGroup.append("text")
-  //   .attr("transform", `translate(${width / 2}, ${height + margin.top + 30})`)
-  //   .attr("class", "axisText")
-  //   .text("Obesity (%)");
-
+   // Add a title
+  chartGroup.append("text")
+      .attr("x", (width / 2))             
+      .attr("y", 0 - (margin.top / 2))
+      .attr("text-anchor-title", "left")  
+      .style("font-size", "20px") 
+      .style("text-decoration", "underline")  
+      .text("Average Income vs. Obesity Rate (by state)");
 
 
 
