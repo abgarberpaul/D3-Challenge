@@ -1,5 +1,4 @@
-# D3-Challenge
-D3 Data journalism
+# D3-Challenge: Data journalism
 
 ## TASK LIST
 
