@@ -3,9 +3,7 @@ D3 Data journalism
 
 ## TASK LIST
 
-### Core Assignment: D3 Dabbler (Required Assignment)
-
-Scatter plot between two of the data variables: `OBESITY vs. INCOME`.
+### Core Project: Scatter plot between two of the data variables: `OBESITY vs. INCOME`.
 
 `app.js`: scatter plot that represents each state with circle elements graphic in the 
 * Using D3 techniques 
@@ -19,7 +17,7 @@ Scatter plot between two of the data variables: `OBESITY vs. INCOME`.
 
 - - -
 
-### Bonus: Impress the Boss (Optional Assignment) 
+### Beyond
 
 Why make a static graphic when D3 lets you interact with your data?
 
