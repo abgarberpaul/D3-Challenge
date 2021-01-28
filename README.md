@@ -6,7 +6,7 @@
 
 ## Comparison between `OBESITY vs. INCOME`.
 
-`app.js`: scatter plot that represents each state with circle elements graphic in the 
+`app.js`: scatter plot that represents each state with circle elements graphic. 
 * Using D3 techniques 
 
 * PullS data from `data.csv` by using the `d3.csv` function. 
