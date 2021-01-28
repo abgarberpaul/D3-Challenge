@@ -2,7 +2,9 @@
 
 ## TASK LIST
 
-### Core Project: Scatter plot between two of the data variables: `OBESITY vs. INCOME`.
+### Core Project: Scatter plot 
+
+## Comparison between two of the data variables: `OBESITY vs. INCOME`.
 
 `app.js`: scatter plot that represents each state with circle elements graphic in the 
 * Using D3 techniques 
