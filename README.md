@@ -8,11 +8,12 @@
 
 `app.js`: scatter plot that represents each state with circle elements graphic in the 
 * Using D3 techniques 
+
 * PullS data from `data.csv` by using the `d3.csv` function. 
 
 * Includes state abbreviations in the circles.
 
-* Create and situate your axes and labels to the left and bottom of the chart.
+* Create and situates axes and labels to the left and bottom of the chart.
 
 * Note: use `python -m http.server` to run the visualization. This will host the page at `localhost:8000` in your web browser.
 
