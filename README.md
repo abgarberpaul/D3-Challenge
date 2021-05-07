@@ -1,6 +1,7 @@
-# D3-Challenge: Data journalism
+# Obesity ScatterPlot using D3
 
-## TASK LIST
+## A D3 Data journalism Challenge
+
 
 ### Core Project: Scatter plot 
 
